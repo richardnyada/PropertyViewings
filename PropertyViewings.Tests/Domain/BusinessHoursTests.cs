@@ -21,30 +21,39 @@ namespace PropertyViewings.Tests.Domain
         }
 
         [Fact]
-        public void IsWithinHours_True_InsideBusinessHours()
+        public void IsWithinHours_True_InsideBusinessHours_Gmt()
         {
+            // Feb is typically GMT (UTC+0)
             BusinessHours.IsWithinHours(new DateTime(2026, 02, 05, 09, 00, 00, DateTimeKind.Utc)).Should().BeTrue();
             BusinessHours.IsWithinHours(new DateTime(2026, 02, 05, 19, 59, 00, DateTimeKind.Utc)).Should().BeTrue();
         }
 
         [Fact]
-        public void IsWithinHours_False_AtOrAfterClose()
+        public void IsWithinHours_False_AtOrAfterClose_Gmt()
         {
             BusinessHours.IsWithinHours(new DateTime(2026, 02, 05, 20, 00, 00, DateTimeKind.Utc)).Should().BeFalse();
             BusinessHours.IsWithinHours(new DateTime(2026, 02, 05, 21, 00, 00, DateTimeKind.Utc)).Should().BeFalse();
         }
 
         [Fact]
-        public void WouldEndWithinHours_LastSlotAt1930_IsAllowed()
+        public void IsWithinHours_Bst_ShiftsByOneHour_InUtc()
+        {
+            // July is typically BST (UTC+1), so 09:00 UK == 08:00 UTC
+            BusinessHours.IsWithinHours(new DateTime(2026, 07, 01, 08, 00, 00, DateTimeKind.Utc)).Should().BeTrue();
+            BusinessHours.IsWithinHours(new DateTime(2026, 07, 01, 18, 30, 00, DateTimeKind.Utc)).Should().BeTrue(); // 19:30 UK
+            BusinessHours.IsWithinHours(new DateTime(2026, 07, 01, 19, 00, 00, DateTimeKind.Utc)).Should().BeFalse(); // 20:00 UK
+        }
+
+        [Fact]
+        public void WouldEndWithinHours_LastSlotAt1930_IsAllowed_Gmt()
         {
             BusinessHours.WouldEndWithinHours(new DateTime(2026, 02, 05, 19, 30, 00, DateTimeKind.Utc)).Should().BeTrue();
         }
 
         [Fact]
-        public void WouldEndWithinHours_SlotStartingAt2000_IsNotAllowed()
+        public void WouldEndWithinHours_SlotStartingAt2000_IsNotAllowed_Gmt()
         {
             BusinessHours.WouldEndWithinHours(new DateTime(2026, 02, 05, 20, 00, 00, DateTimeKind.Utc)).Should().BeFalse();
         }
     }
-
 }

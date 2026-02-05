@@ -1,4 +1,5 @@
 ﻿using PropertyViewings.Application.Abstractions;
+using PropertyViewings.Domain.Time;
 
 namespace PropertyViewings.Application.Features.Search
 {
@@ -16,8 +17,8 @@ namespace PropertyViewings.Application.Features.Search
             if (to < from)
                 throw new InvalidOperationException("To must be on or after From.");
 
-            var fromUtc = DateTime.SpecifyKind(from.ToDateTime(TimeOnly.MinValue), DateTimeKind.Utc);
-            var toUtcExclusive = DateTime.SpecifyKind(to.AddDays(1).ToDateTime(TimeOnly.MinValue), DateTimeKind.Utc);
+            var fromUtc = UkTime.StartOfUkDayUtc(from);
+            var toUtcExclusive = UkTime.StartOfUkDayUtc(to.AddDays(1));
 
             var booked = await _repo.GetBookedStartsAsync(propertyId, fromUtc, toUtcExclusive, ct);
             var bookedSet = booked.ToHashSet();

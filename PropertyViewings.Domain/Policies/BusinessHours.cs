@@ -1,4 +1,5 @@
-﻿
+﻿using PropertyViewings.Domain.Time;
+
 namespace PropertyViewings.Domain.Policies
 {
     public static class BusinessHours
@@ -14,8 +15,9 @@ namespace PropertyViewings.Domain.Policies
 
         public static bool IsWithinHours(DateTime startUtc)
         {
-            var t = TimeOnly.FromDateTime(startUtc);
-            // start must be >= 09:00 and < 20:00
+            var ukLocal = UkTime.ToUkLocal(startUtc);
+            var t = TimeOnly.FromDateTime(ukLocal);
+            // start must be >= 09:00 and < 20:00 (UK local time)
             return t >= Open && t < Close;
         }
 
@@ -23,10 +25,12 @@ namespace PropertyViewings.Domain.Policies
 
         public static bool WouldEndWithinHours(DateTime startUtc)
         {
-            // End must be <= 20:00 on the same day
-            var closeUtc = DateTime.SpecifyKind(startUtc.Date, DateTimeKind.Utc)
+            // End must be <= 20:00 on the same UK local day
+            var ukLocalStart = UkTime.ToUkLocal(startUtc);
+            var ukLocalCloseUnspecified = DateTime.SpecifyKind(ukLocalStart.Date, DateTimeKind.Unspecified)
                 .Add(Close.ToTimeSpan());
 
+            var closeUtc = UkTime.ToUtcFromUkLocal(ukLocalCloseUnspecified);
             return EndTimeUtc(startUtc) <= closeUtc;
         }
     }
