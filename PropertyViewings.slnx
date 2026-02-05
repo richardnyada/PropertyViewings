@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="PropertyViewings.Api/PropertyViewings.Api.csproj" />
+  <Project Path="PropertyViewings.Application/PropertyViewings.Application.csproj" />
+  <Project Path="PropertyViewings.Domain/PropertyViewings.Domain.csproj" />
+  <Project Path="PropertyViewings.Infrastructure/PropertyViewings.Infrastructure.csproj" />
+</Solution>
