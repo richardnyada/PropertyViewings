@@ -14,9 +14,4 @@
     <ProjectReference Include="..\PropertyViewings.Domain\PropertyViewings.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Bookings\" />
-    <Folder Include="Features\Search\" />
-  </ItemGroup>
-
 </Project>
