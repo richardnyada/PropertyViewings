@@ -5,9 +5,10 @@ using PropertyViewings.Application.Features.Search;
 namespace PropertyViewings.Api.Controllers
 {
     [ApiController]
+    [Route("api")]
     public class ViewingsController : ControllerBase
     {
-        [HttpPost("api/viewings")]
+        [HttpPost("viewings")]
         public async Task<ActionResult<BookViewingResponse>> Book(
             [FromBody] BookViewingRequest request,
             [FromServices] BookViewingUseCase useCase,
@@ -18,7 +19,7 @@ namespace PropertyViewings.Api.Controllers
         }
 
         // GET /api/properties/{propertyId}/availability?from=2026-02-05&to=2026-02-06
-        [HttpGet("api/properties/{propertyId}/availability")]
+        [HttpGet("properties/{propertyId}/availability")]
         public async Task<ActionResult<SearchAvailabilityResponse>> Availability(
             [FromRoute] string propertyId,
             [FromQuery] DateOnly from,
